@@ -1,11 +1,15 @@
 package dk.kea.jpa.model;
 
+import javax.persistence.*;
 import java.util.Set;
 
 //databaseklasse
+@Entity
 public class Recipe {
 
     //primary key - autoincrement via strategy
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String description;
@@ -16,8 +20,10 @@ public class Recipe {
     private String url;
     private String directions;
 
+    @OneToOne
     private Notes notes;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
 
     public Recipe(){}

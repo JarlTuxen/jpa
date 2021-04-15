@@ -1,16 +1,24 @@
 package dk.kea.jpa.model;
 
 
+import javax.persistence.*;
+
 // entitetsklasse i jpa - tabel kan specificeres
+@Entity
+@Table(name = "notes")
 public class Notes {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	// kolonnenavn kan specificeres
 	private String description;
 
     //FetchType Lazy og Eager - hente ved tilgang til eller straks, når parent hentes
-
+	@OneToOne
+	//@JoinColumn(name = "recipe_id")
 	private Recipe recipe;
 
 	public Notes() {
