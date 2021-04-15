@@ -18,7 +18,7 @@ public class RecipeController {
     public String index(Model model){
 
         // find opskrifter og put dem i view modellen
-        //model.addAttribute("recipes", recipeService.findAll());
+        model.addAttribute("recipes", recipeService.findAll());
 
         return "index";
     }

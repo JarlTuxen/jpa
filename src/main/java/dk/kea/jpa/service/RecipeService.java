@@ -16,5 +16,13 @@ public class RecipeService {
     @Autowired
     RecipeRepository recipeRepository;
 
+    public Set<Recipe> findAll(){
+        //hent alle opskrifter fre repo med finaAll og returner collection
+        Set<Recipe> recipes = new HashSet<>();
+        for (Recipe recipe: recipeRepository.findAll()){
+            recipes.add(recipe);
+        }
+        return recipes;
+    }
 
 }
