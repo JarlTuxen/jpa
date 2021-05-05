@@ -27,6 +27,7 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
 
+    /*
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     //specificer jointabellen
     @JoinTable(name = "recipe_category",
@@ -34,7 +35,7 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
-
+*/
     public Recipe(){}
 
     public Recipe(String description, Integer prepTime, Integer cookTime, Integer servings, String source, String url, String directions) {
@@ -48,7 +49,7 @@ public class Recipe {
         //no notes, ingredients, categories in constructor
         this.notes = notes;
         this.ingredients = ingredients;
-        this.categories = categories;
+        //this.categories = categories;
     }
 
     public Long getId() {
@@ -130,7 +131,7 @@ public class Recipe {
     public void setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
-
+/*
     public Set<Category> getCategories() {
         return categories;
     }
@@ -138,5 +139,7 @@ public class Recipe {
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
+
+ */
 }
 

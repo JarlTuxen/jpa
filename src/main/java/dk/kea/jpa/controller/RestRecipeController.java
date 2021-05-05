@@ -21,17 +21,16 @@ public class RestRecipeController {
     RecipeRepository recipeRepository;
     NotesRepository notesRepository;
     IngredientRepository ingredientRepository;
-    CategoryRepository categoryRepository;
+
 
     // constructor injection
     public RestRecipeController(RecipeRepository recipeRepository,
                                 NotesRepository notesRepository,
-                                IngredientRepository ingredientRepository,
-                                CategoryRepository categoryRepository) {
+                                IngredientRepository ingredientRepository) {
         this.recipeRepository = recipeRepository;
         this.notesRepository = notesRepository;
         this.ingredientRepository = ingredientRepository;
-        this.categoryRepository = categoryRepository;
+
     }
 
     // HTTP Get List
