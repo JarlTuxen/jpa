@@ -65,6 +65,7 @@ public class RestRecipeController {
         Notes _notes=r.getNotes();
         _notes.setRecipe(_recipe);
         notesRepository.save(_notes);
+        _recipe.setNotes(_notes);
 
         Set<Ingredient> _ingredients = r.getIngredients();
         for (Ingredient ingredient : _ingredients){
