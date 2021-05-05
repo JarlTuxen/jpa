@@ -1,5 +1,7 @@
 package dk.kea.jpa.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -13,6 +15,7 @@ public class Ingredient {
     private String description;
     private BigDecimal amount;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="recipe_id")
     private Recipe recipe;
