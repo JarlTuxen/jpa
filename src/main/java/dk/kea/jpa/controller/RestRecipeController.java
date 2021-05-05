@@ -9,6 +9,7 @@ import dk.kea.jpa.repository.CategoryRepository;
 import dk.kea.jpa.repository.IngredientRepository;
 import dk.kea.jpa.repository.NotesRepository;
 import dk.kea.jpa.repository.RecipeRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +37,10 @@ public class RestRecipeController {
 
     // HTTP Get List
     @GetMapping("/recipe")
-    public Iterable<Recipe> findAll(){
+    public ResponseEntity<Iterable<Recipe>> findAll(){
 
         // find all recipes
-        return recipeRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(recipeRepository.findAll());
     }
 
     // HTTP Get by ID
@@ -47,9 +48,9 @@ public class RestRecipeController {
     public ResponseEntity<Optional<Recipe>> findById(@PathVariable Long id){
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if(recipe.isPresent()){
-            return ResponseEntity.status(200).body(recipe); // OK
+            return ResponseEntity.status(HttpStatus.OK).body(recipe); // OK
         } else {
-            return ResponseEntity.status(404).body(recipe); // Not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(recipe); // Not found
         }
     }
 
@@ -58,21 +59,26 @@ public class RestRecipeController {
     @PostMapping(value="/recipe", consumes={"application/json"})
     public ResponseEntity<String> create(@RequestBody Recipe r){
         Recipe _recipe = new Recipe(r.getDescription(), r.getPrepTime(), r.getCookTime(), r.getServings(), r.getSource(), r.getUrl(), r.getDirections());
-        //gem recipe, så der er et id tilknyttet til den nye opskrift til mapning i modsat regning
+        //gem recipe, så der er et id tilknyttet til den nye opskrift til mapning i modsat retning
+        //_recipe_id kan så bruges som fremmenøgle i notes, ingredients og categories
         recipeRepository.save(_recipe);
 
         //brug af notes-objekt i r request body
         Notes _notes=r.getNotes();
+        //sæt fremmednøgle til recipe_id i notes
         _notes.setRecipe(_recipe);
         notesRepository.save(_notes);
+        //sæt fremmednøgle til note_id i recipe
         _recipe.setNotes(_notes);
 
         Set<Ingredient> _ingredients = r.getIngredients();
+        //iterer igennem _ingredients og tilføj dem
         for (Ingredient ingredient : _ingredients){
+            //sæt fremmednøgle til recipe_id i ingredient
             ingredient.setRecipe(_recipe);
             ingredientRepository.save(ingredient);
         }
-        _recipe.setIngredients(_ingredients);
+        //_recipe.setIngredients(_ingredients); //ikke nødvendigt at tilføje til _recipe, da fremmednøglen er i _ingredients
 
         //category - kør igennem categories på ny recipe
         //  find tilsvarende category i repository
@@ -90,11 +96,12 @@ public class RestRecipeController {
                 System.out.println("unknown category id");
             }
         }
+        //tilføj nye fremmednøgler til jointabel til _recipe
         _recipe.setCategories(_categories);
-        //skal den gemmes igen?
+        //opdater _recipe efter tilføjelse af fremmenøgler til notes og categories
         recipeRepository.save(_recipe);
 
-        return ResponseEntity.status(201).header("Location", "/recipe/" + r.getId()).body("{'Msg': 'post created'}");
+        return ResponseEntity.status(HttpStatus.CREATED).header("Location", "/recipe/" + r.getId()).body("{'Msg': 'post created'}");
     }
 
     // HTTP PUT, ie. update
@@ -104,13 +111,13 @@ public class RestRecipeController {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
         if (!optionalRecipe.isPresent()){
             //Recipe id findes ikke
-            return ResponseEntity.status(404).body("{'msg':'Not found'");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{'msg':'recipe ' + id ' not found'");
         }
 
         //opdater category, ingredient og notes sker automatisk - nu er relationen oprettet
         //save recipe
         recipeRepository.save(r);
-        return ResponseEntity.status(204).body("{'msg':'Updated'}");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("{'msg':'Updated'}");
     }
 
     // HTTPDelete
@@ -119,7 +126,7 @@ public class RestRecipeController {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         //check at opskriften findes
         if(!recipe.isPresent()){
-            return ResponseEntity.status(404).body("{'msg':'Not found'"); // Not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{'msg':'recipe ' + id ' not found'"); // Not found
         }
 
         Recipe r = recipe.get();
@@ -137,6 +144,6 @@ public class RestRecipeController {
         //til sidst kan recipe slettes uden at bryde referentiel integritet
         recipeRepository.deleteById(id);
 
-        return ResponseEntity.status(200).body("{'msg':'Deleted'}");
+        return ResponseEntity.status(HttpStatus.OK).body("{'msg':'Deleted'}");
     }
 }
