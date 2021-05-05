@@ -10,41 +10,7 @@
 <body>
 <div class="container">
 <h1>Opskrifter</h1>
-
-<table>
-    <thead class="table table-striped">
-        <tr>
-            <th scope="col">Opskrift</th>
-            <th scope="col">Kilde</th>
-            <th scope="col">Fremgangsmåde</th>
-            <th scope="col">Noter</th>
-<!--            <th scope="col">Kategorier</th> -->
-            <th scope="col"></th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr  scope="row" th:each="recipe : ${recipes}">
-            <td th:text="${recipe.description}">kage</td>
-            <td th:text="${recipe.source}">Jimmy</td>
-            <td th:text="${recipe.directions}">drik en kop te</td>
-            <td th:text="${recipe.notes.description}">nyttige noter</td>
- <!--
-            <td>
-                <p th:each="category : ${recipe.categories}">
-                    <span th:text="${category.description}">min kategori</span>
-                </p>
-            </td>
--->
-            <td><a class="btn btn-warning" th:href="@{'/update/' + ${recipe.id}}">Opdater</a></td>
-
-            <td><a class="btn btn-danger" th:href="@{'/delete/' + ${recipe.id}}">Slet</a></td>
-        </tr>
-    </tbody>
-
-</table>
-
-<a class="btn btn-primary" href="create">Opret opskrift</a>
+<p>Rest Api for Recipe, Ingredient, Notes og Category</p>
 <a class="btn btn-info" href="h2-console">H2-console</a>
 
 </body>
