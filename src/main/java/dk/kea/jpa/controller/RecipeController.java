@@ -10,4 +10,5 @@ public class RecipeController {
     public String index(){
         return "index";
     }
+
 }

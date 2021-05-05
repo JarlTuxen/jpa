@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.Set;
 
-
 @Entity
 public class Category {
 
@@ -17,7 +16,7 @@ public class Category {
 
     @ManyToMany( mappedBy = "categories", cascade = CascadeType.ALL )
     //envejs reference i JSON for at undgå uendeligt loop - ignoreres
-    @JsonIgnore
+
     Set<Recipe> recipes;
 
     public Category() {
