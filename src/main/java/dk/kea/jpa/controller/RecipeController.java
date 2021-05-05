@@ -5,6 +5,7 @@ import dk.kea.jpa.repository.IngredientRepository;
 import dk.kea.jpa.repository.NotesRepository;
 import dk.kea.jpa.repository.RecipeRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class RecipeController {
@@ -20,5 +21,8 @@ public class RecipeController {
         this.categoryRepository = categoryRepository;
     }
 
-
+    @GetMapping("/")
+    public String index(){
+        return "index";
+    }
 }

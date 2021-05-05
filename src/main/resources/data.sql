@@ -1,7 +1,16 @@
+INSERT INTO category (description) VALUES ('Morgenmad');
+INSERT INTO category (description) VALUES ('Italian');
+INSERT INTO category (description) VALUES ('Mexican');
+INSERT INTO category (description) VALUES ('Fast Food');
+
 INSERT INTO recipe (description, prep_Time, cook_Time, servings, source, url, directions)
     VALUES ('Porrige', 60, 20, 4, 'Margarat', 'https://www.bbcgoodfood.com/recipes/perfect-porridge', 'Start by cooking milk');
 INSERT INTO recipe (description, prep_Time, cook_Time, servings, source, url, directions)
     VALUES ('Bread', 10, 20, 10, 'Cassie', 'https://www.bbcgoodfood.com/recipes/seed-grain-cottage-loaf', 'Start by cooking milk - always');
+
+INSERT INTO recipe_category (category_id, recipe_id) values (1, 1);
+INSERT INTO recipe_category (category_id, recipe_id) values (4, 1);
+INSERT INTO recipe_category (category_id, recipe_id) values (3, 2);
 
 INSERT INTO notes (description, recipe_id) VALUES ('This should be done by all people', 1);
 UPDATE recipe SET notes_id = 1 WHERE id = 1;
