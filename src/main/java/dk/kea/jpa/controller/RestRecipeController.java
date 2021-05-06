@@ -43,33 +43,73 @@ public class RestRecipeController {
     }
 
     // HTTP Get by ID
+    @GetMapping("/recipe/{id}")
+    public ResponseEntity<Optional<Recipe>> findById(@PathVariable Long id)
+    {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
+        if (optionalRecipe.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(optionalRecipe);
+        }
+        else{
+            //Not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(optionalRecipe);
+        }
+    }
 
     // HTTP Post, ie. create
+    @CrossOrigin(originPatterns = "*", exposedHeaders = "Location")
+    @PostMapping(value = "/recipe", consumes = "application/json")
+    public ResponseEntity<String> create(@RequestBody Recipe r){
         //gem recipe, så der er et id tilknyttet til den nye opskrift til mapning i modsat retning
         //_recipe_id kan så bruges som fremmenøgle i notes, ingredients og categories
+        Recipe _recipe = new Recipe(r.getDescription(), r.getPrepTime(), r.getCookTime(), r.getServings(),
+                r.getSource(), r.getUrl(), r.getDirections());
 
         //brug af notes-objekt i r request body
+        Notes _notes = r.getNotes();
 
         //sæt fremmednøgle til recipe_id i notes
+        _notes.setRecipe(_recipe);
+        notesRepository.save(_notes);
 
         //sæt fremmednøgle til note_id i recipe
+        _recipe.setNotes(_notes);
 
+        Set<Ingredient> _ingredients = r.getIngredients();
         //iterer igennem _ingredients og tilføj dem
-
+        for (Ingredient ingredient: _ingredients) {
             //sæt fremmednøgle til recipe_id i ingredient
+            ingredient.setRecipe(_recipe);
+            ingredientRepository.save(ingredient);
+        }
 
         //ikke nødvendigt at tilføje til _recipe, da fremmednøglen er i _ingredients
 
         //category - kør igennem categories på ny recipe
-
         //  find tilsvarende category i repository
-
-        //  opdater category med opskrift
-
+        //  opdater category med recipe
+        Set<Category> _categories = r.getCategories();
+        for (Category category : _categories) {
+            Optional<Category> optionalCategory = categoryRepository.findById(category.getId());
+            if (optionalCategory.isPresent()) {
+                Category cat = optionalCategory.get();
+                cat.getRecipes().add(_recipe);
+                categoryRepository.save(cat);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category " + category.getId() + " not found");
+            }
+        }
         //tilføj nye fremmednøgler til jointabel til _recipe
+        _recipe.setCategories(_categories);
 
         //opdater _recipe efter tilføjelse af fremmenøgler til notes og categories
+        recipeRepository.save(_recipe);
 
+        //endelig kan vi sende svar med location
+        return ResponseEntity.status(HttpStatus.CREATED).header("Location", "/recipe/" + r.getId())
+                .body("{'Msg': 'Post created'}");
+
+    }
 
     // HTTP PUT, ie. update
 
