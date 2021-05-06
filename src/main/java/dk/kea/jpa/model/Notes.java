@@ -1,6 +1,8 @@
 package dk.kea.jpa.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 // entitetsklasse i jpa - tabel kan specificeres
@@ -16,6 +18,7 @@ public class Notes {
 	// kolonnenavn kan specificeres
 	private String description;
 
+	@JsonBackReference
     //FetchType Lazy og Eager - hente ved tilgang til eller straks, når parent hentes
 	@OneToOne
 	//@JoinColumn(name = "recipe_id")

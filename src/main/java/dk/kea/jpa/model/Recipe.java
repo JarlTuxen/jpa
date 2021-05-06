@@ -1,5 +1,7 @@
 package dk.kea.jpa.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,12 +23,13 @@ public class Recipe {
     private String url;
     private String directions;
 
+    @JsonManagedReference
     @OneToOne
     private Notes notes;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
-
 
     @ManyToMany(cascade = CascadeType.ALL)
     //specificer jointabellen

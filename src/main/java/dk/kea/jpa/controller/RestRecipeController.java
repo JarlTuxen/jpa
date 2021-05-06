@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.Set;
 
-
+@RestController
 public class RestRecipeController {
 
     RecipeRepository recipeRepository;
@@ -36,6 +36,11 @@ public class RestRecipeController {
     }
 
     // HTTP Get List
+    @GetMapping("/recipe")
+    public ResponseEntity<Iterable<Recipe>> findAll(){
+        //findAll recipes and return
+        return ResponseEntity.status(HttpStatus.OK).body(recipeRepository.findAll());
+    }
 
     // HTTP Get by ID
 
