@@ -130,6 +130,8 @@ public class RestRecipeController {
         }
 
         Recipe r = recipe.get();
+
+        //slet categories
         //slet først referencerne til recipe i categories
         for (Category c: r.getCategories()){
             c.getRecipes().remove(r);
@@ -137,6 +139,8 @@ public class RestRecipeController {
 
         //derefter kan categories slettes fra recipe
         r.setCategories(null);
+
+        //slet notes sker via CascadeType.All
 
         //og opdateres (nu uden category mappings)
         recipeRepository.save(r);
