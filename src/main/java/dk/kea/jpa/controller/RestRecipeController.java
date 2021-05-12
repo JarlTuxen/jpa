@@ -63,7 +63,7 @@ public class RestRecipeController {
         //gem recipe, så der er et id tilknyttet til den nye opskrift til mapning i modsat retning
         //_recipe_id kan så bruges som fremmenøgle i notes, ingredients og categories
         Recipe _recipe = new Recipe(r.getDescription(), r.getPrepTime(), r.getCookTime(), r.getServings(), r.getSource(), r.getUrl(), r.getDirections());
-        //glemt i undervisning torsdag
+        //glemt i undervisning torsdag - sørger for ny primary key til brug som fremmednøgle i andre klasser
         recipeRepository.save(_recipe);
 
         //brug af notes-objekt i r request body

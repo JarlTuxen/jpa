@@ -31,7 +31,7 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     //specificer jointabellen
     @JoinTable(name = "recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id"),
