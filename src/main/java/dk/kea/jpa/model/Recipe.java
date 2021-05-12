@@ -24,7 +24,7 @@ public class Recipe {
     private String directions;
 
     @JsonManagedReference
-    @OneToOne( cascade = CascadeType.ALL )
+    @OneToOne( cascade = CascadeType.ALL ) //skal slettes når recipe slettes
     private Notes notes;
 
     @JsonManagedReference
