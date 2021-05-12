@@ -15,7 +15,7 @@ public class Category {
 
     private String description;
 
-    @ManyToMany( mappedBy = "categories" )
+    @ManyToMany( mappedBy = "categories", cascade = CascadeType.ALL )
     //envejs reference i JSON for at undgå uendeligt loop - ignoreres
     @JsonIgnore
     Set<Recipe> recipes;

@@ -119,7 +119,7 @@ public class RestRecipeController {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
         if (!optionalRecipe.isPresent()) {
             //Recipe id findes ikke
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{'msg' : 'recipe ' + id + + ' not found'");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{'msg' : 'recipe " + id + " not found'");
         }
         //opdater category, ingredient og notes sker automatisk - nu er relationen oprettet
         //save recipe
@@ -127,24 +127,32 @@ public class RestRecipeController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("{ 'msg' : 'updated' }");
     }
 
-    // HTTPDelete
-
+    // HTTPDelete - first shot
+    @DeleteMapping("/recipe/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
         //check at opskriften findes
+        if (!optionalRecipe.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{ 'msg' : 'recipe " + id + " not found'}");
+        }
 
-
+        Recipe r = optionalRecipe.get();
 
         //slet først referencerne til recipe i categories
-
+        for (Category c : r.getCategories()) {
+            c.getRecipes().remove(r);
+        }
 
         //derefter kan categories slettes fra recipe
-
+        r.setCategories(null);
 
         //og opdateres (nu uden category mappings)
-
+        recipeRepository.save(r);
 
         //til sidst kan recipe slettes uden at bryde referentiel integritet
+        recipeRepository.deleteById(id);
 
-
-
+        return ResponseEntity.status(HttpStatus.OK).body("{ 'msg' : 'deleted'}");
+    }
 
 }
