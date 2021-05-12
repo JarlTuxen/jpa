@@ -24,14 +24,14 @@ public class Recipe {
     private String directions;
 
     @JsonManagedReference
-    @OneToOne
+    @OneToOne( cascade = CascadeType.ALL )
     private Notes notes;
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
 
-    @ManyToMany( cascade = CascadeType.ALL )
+    @ManyToMany
     //specificer jointabellen
     @JoinTable(name = "recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id"),
