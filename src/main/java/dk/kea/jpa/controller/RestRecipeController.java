@@ -113,15 +113,19 @@ public class RestRecipeController {
     }
 
     // HTTP PUT, ie. update
-
+    @PutMapping("/recipe/{id}")
+    public ResponseEntity<String> update(@PathVariable("id") Long id, @RequestBody Recipe r) {
         //get recipeById
-
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
+        if (!optionalRecipe.isPresent()) {
             //Recipe id findes ikke
-
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{'msg' : 'recipe ' + id + + ' not found'");
+        }
         //opdater category, ingredient og notes sker automatisk - nu er relationen oprettet
         //save recipe
-
+        recipeRepository.save(r);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("{ 'msg' : 'updated' }");
+    }
 
     // HTTPDelete
 
